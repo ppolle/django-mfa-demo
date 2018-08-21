@@ -24,3 +24,10 @@ class UserAuthForm(forms.Form):
 	'''
 	username = forms.CharField(label = 'Username',max_length = 30,required = True,widget=forms.TextInput(attrs={'class':'form-control'}))
 	password = forms.CharField(label = 'Password',required = True,widget=forms.PasswordInput(attrs={'class':'form-control'}))
+
+class EmailConfirmationForm(forms.Form):
+	'''
+	Form class to render email input form
+	'''
+
+	email = forms.EmailField(max_length=254,label = 'Email', required= True, help_text='Required. Inform a valid email address.',widget=forms.PasswordInput(attrs={'class':'form-control'}))

@@ -1,7 +1,7 @@
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login as user_login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
-from .forms  import UserSignupForm,UserAuthForm
+from .forms  import UserSignupForm,UserAuthForm,EmailConfirmationForm
 
 # Create your views here.
 def welcome(request):
@@ -37,11 +37,21 @@ def login(request):
 			user = authenticate(username = username,password=password)
 			if user is not None:
 
-				login(request,user)
-				return redirect('home')
+				user_login(request,user)
+				return redirect('profile')
 
 			else:
 				return redirect(request.META.get('HTTP_REFERER'))
 	else:
 		form = UserAuthForm()
 		return render(request,'authentication/login.html',{'form':form})
+
+def profile(request):
+	'''
+	View function to handle sending email links
+	'''
+	if request.user.email:
+		return render(request,'homepage.html')
+	else:
+		form = EmailConfirmationForm()
+		return render(request,'email.html',{'form':form})

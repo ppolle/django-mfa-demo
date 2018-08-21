@@ -5,4 +5,5 @@ urlpatterns=[
     url('^$',views.welcome,name = 'welcome'),
     url('^sign-up$',views.signup, name = 'signup'),
     url('^login$',views.login,name = 'login'),
+    url('^profile$',views.profile,name = 'profile'),
 ]
