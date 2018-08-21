@@ -35,9 +35,13 @@ def login(request):
 			username =  form.cleaned_data.get('username')
 			password  =  form.cleaned_data.get('password')
 			user = authenticate(username = username,password=password)
-			login(request,user)
+			if user is not None:
 
-			return redirect('home')
+				login(request,user)
+				return redirect('home')
+
+			else:
+				return redirect(request.META.get('HTTP_REFERER'))
 	else:
 		form = UserAuthForm()
 		return render(request,'authentication/login.html',{'form':form})

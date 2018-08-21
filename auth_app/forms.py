@@ -23,4 +23,4 @@ class UserAuthForm(forms.Form):
 	Form class to create login form
 	'''
 	username = forms.CharField(label = 'Username',max_length = 30,required = True,widget=forms.TextInput(attrs={'class':'form-control'}))
-	password = forms.CharField(label = 'Password',required = True,widget=forms.TextInput(attrs={'class':'form-control'}))
+	password = forms.CharField(label = 'Password',required = True,widget=forms.PasswordInput(attrs={'class':'form-control'}))
