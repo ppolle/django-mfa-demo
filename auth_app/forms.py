@@ -30,4 +30,4 @@ class EmailConfirmationForm(forms.Form):
 	Form class to render email input form
 	'''
 
-	email = forms.EmailField(max_length=254,label = 'Email', required= True, help_text='Required. Inform a valid email address.',widget=forms.PasswordInput(attrs={'class':'form-control'}))
+	email = forms.EmailField(max_length=254,label = 'Email', required= True, help_text='Required. Inform a valid email address.',widget=forms.TextInput(attrs={'class':'form-control'}))

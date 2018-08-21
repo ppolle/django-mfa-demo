@@ -2,6 +2,7 @@ from django.contrib.auth import login as user_login, authenticate, logout as use
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 from .forms  import UserSignupForm,UserAuthForm,EmailConfirmationForm
+from django.contrib.auth.models import User
 
 # Create your views here.
 def welcome(request):
@@ -53,8 +54,15 @@ def profile(request):
 	if request.user.email:
 		return render(request,'homepage.html')
 	else:
-		form = EmailConfirmationForm()
-		return render(request,'email.html',{'form':form})
+		if request.method == 'POST':
+			form = EmailConfirmationForm(request.POST)
+			if form.is_valid():
+				email = form.cleaned_data.get('email')
+				User.objects.filter(id = request.user.id).update(email = email)
+				return redirect('profile')
+		else:
+			form = EmailConfirmationForm()
+			return render(request,'email.html',{'form':form})
 
 def logout(request):
 	'''
