@@ -5,6 +5,7 @@ from .forms  import UserSignupForm,UserAuthForm,EmailConfirmationForm
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
@@ -58,6 +59,7 @@ def login(request):
 		form = UserAuthForm()
 		return render(request,'authentication/login.html',{'form':form})
 
+@login_required(login_url='/login/')
 def profile(request):
 	'''
 	View function to handle sending email links
@@ -87,18 +89,22 @@ def profile(request):
 			form = EmailConfirmationForm()
 			return render(request,'email.html',{'form':form})
 
+@login_required(login_url='/login/')
 def logout(request):
 	'''
 	View function handle logout functionality
 	'''
 	user_logout(request)
 	return redirect('welcome')
+
+@login_required(login_url='/login/')
 def activation_sent(request):
 	'''
 	View function to render page after activation email has been sent
 	'''
 	return render(request,'email/activation_sent.html')
 
+@login_required(login_url='/login/')
 def activate(request, uidb64,email,token):
     try:
         uid = force_text(urlsafe_base64_decode(uidb64))
