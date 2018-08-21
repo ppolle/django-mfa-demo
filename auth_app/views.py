@@ -1,4 +1,4 @@
-from django.contrib.auth import login as user_login, authenticate
+from django.contrib.auth import login as user_login, authenticate, logout as user_logout
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 from .forms  import UserSignupForm,UserAuthForm,EmailConfirmationForm
@@ -55,3 +55,10 @@ def profile(request):
 	else:
 		form = EmailConfirmationForm()
 		return render(request,'email.html',{'form':form})
+
+def logout(request):
+	'''
+	View function handle logout functionality
+	'''
+	user_logout(request)
+	return redirect('welcome')
