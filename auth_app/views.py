@@ -4,6 +4,13 @@ from django.shortcuts import render, redirect
 from .forms  import UserSignupForm,UserAuthForm,EmailConfirmationForm
 from django.contrib.auth.models import User
 
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.template.loader import render_to_string
+from .tokens import account_activation_token
+from django.core.mail import EmailMessage
+
 # Create your views here.
 def welcome(request):
 	'''
@@ -57,9 +64,20 @@ def profile(request):
 		if request.method == 'POST':
 			form = EmailConfirmationForm(request.POST)
 			if form.is_valid():
-				email = form.cleaned_data.get('email')
-				User.objects.filter(id = request.user.id).update(email = email)
-				return redirect('profile')
+				current_site = get_current_site(request)
+				mail_subject = 'Activate your Email Address'
+				message = render_to_string('email/activate_email.html',{
+					'user': request.user,
+					'domain': current_site.domain,
+					'uid': urlsafe_base64_encode(force_bytes(request.user.pk)),
+					'email': urlsafe_base64_encode(force_bytes(form.cleaned_data.get('email'))),
+					'token':account_activation_token.make_token(request.user),
+					})
+				reciever_email = form.cleaned_data.get('email')
+				email = EmailMessage(mail_subject,message,to=[reciever_email])
+				email.send()
+			
+				return redirect('activation_sent')
 		else:
 			form = EmailConfirmationForm()
 			return render(request,'email.html',{'form':form})
@@ -70,3 +88,22 @@ def logout(request):
 	'''
 	user_logout(request)
 	return redirect('welcome')
+def activation_sent(request):
+	'''
+	View function to render page after activation email has been sent
+	'''
+	return render(request,'email/activation_sent.html')
+
+def activate(request, uidb64,email,token):
+    try:
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+        email = force_text(urlsafe_base64_decode(email))
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    if user is not None and account_activation_token.check_token(user, token):
+    	User.objects.filter(id = user.id).update(email = email)
+    	return redirect('profile')
+    else:
+        return HttpResponse('Activation link is invalid!')
+
