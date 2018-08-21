@@ -3,6 +3,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 from .forms  import UserSignupForm,UserAuthForm,EmailConfirmationForm
 from django.contrib.auth.models import User
+from django.http import HttpResponse
+from django.contrib import messages
 
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
@@ -46,9 +48,11 @@ def login(request):
 			if user is not None:
 
 				user_login(request,user)
+				messages.success(request, f'Welcome back {username}!')
 				return redirect('profile')
 
 			else:
+				messages.error(request, 'Wrong username/paswword combination.Please try again!')
 				return redirect(request.META.get('HTTP_REFERER'))
 	else:
 		form = UserAuthForm()
@@ -79,6 +83,7 @@ def profile(request):
 			
 				return redirect('activation_sent')
 		else:
+			
 			form = EmailConfirmationForm()
 			return render(request,'email.html',{'form':form})
 
@@ -103,6 +108,7 @@ def activate(request, uidb64,email,token):
         user = None
     if user is not None and account_activation_token.check_token(user, token):
     	User.objects.filter(id = user.id).update(email = email)
+    	messages.success(request, f'Hey {user.username}! You have succesfully activated your email address!')
     	return redirect('profile')
     else:
         return HttpResponse('Activation link is invalid!')
