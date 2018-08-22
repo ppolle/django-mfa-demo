@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'auth_app',
     'bootstrap3',
+    'qr_code',
     
 ]
 
