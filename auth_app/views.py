@@ -65,7 +65,11 @@ def profile(request):
 	View function to handle sending email links
 	'''
 	if request.user.email:
-		return render(request,'homepage.html')
+		if request.user.profile.google_auth_enabled:
+			return redirect('gauth-validator')
+		else:
+			return redirect('gauth-generator')
+		
 	else:
 		if request.method == 'POST':
 			form = EmailConfirmationForm(request.POST)
@@ -120,3 +124,14 @@ def activate(request, uidb64,email,token):
     else:
         return HttpResponse('Activation link is invalid!')
 
+def gauth_validator(request):
+	'''
+	View function to handle google authentication token validation
+	'''
+	return render(request,'homepage.html')
+	
+def gauth_generator(request):
+	'''
+	View function to handle google authentication qr code generation and validation
+	'''
+	return render(request,'homepage.html')
