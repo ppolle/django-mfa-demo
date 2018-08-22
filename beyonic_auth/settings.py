@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'auth_app',
     'bootstrap3',
-    'django_mfa',
+    
 ]
 
 MIDDLEWARE = [
@@ -60,7 +60,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-     'django_mfa.middleware.MfaMiddleware',
+
 ]
 
 ROOT_URLCONF = 'beyonic_auth.urls'
