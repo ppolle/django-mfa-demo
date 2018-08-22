@@ -113,6 +113,7 @@ def activate(request, uidb64,email,token):
     except(TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
     if user is not None and account_activation_token.check_token(user, token):
+    	user.profile.email_confirmed = True
     	User.objects.filter(id = user.id).update(email = email)
     	messages.success(request, f'Hey {user.username}! You have succesfully activated your email address!')
     	return redirect('profile')
