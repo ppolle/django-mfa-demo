@@ -1,10 +1,14 @@
 dj-database-url==0.5.0
 Django==1.11
 django-bootstrap3==10.0.1
+django-mfa==1.0
+django-qr-code==1.0.0
 gunicorn==19.9.0
-pkg-resources==0.0.0
+Pillow==5.2.0
 psycopg2==2.7.5
 psycopg2-binary==2.7.5
 python-decouple==3.1
 pytz==2018.5
+qrcode==6.0
+six==1.11.0
 whitenoise==4.0
