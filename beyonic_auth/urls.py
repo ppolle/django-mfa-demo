@@ -19,5 +19,7 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'',include('auth_app.urls')),
+    url(r'',include('google_auth.urls')),
+    url(r'^settings/', include('django_mfa.urls', namespace="mfa")),
     
 ]
