@@ -66,10 +66,7 @@ def profile(request):
 	'''
 	if request.user.email:
 		return redirect('/settings/security')
-		# if request.user.profile.google_auth_enabled:
-		# 	return redirect('gauth-validator')
-		# else:
-		# 	return redirect('gauth-generator')
+	
 		
 	else:
 		if request.method == 'POST':
