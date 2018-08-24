@@ -5,6 +5,6 @@ app_name = 'nexmo_auth'
 
 
 urlpatterns=[
-	url('^signupVerification$',views.verification,name = 'signupVerification'),
+	url('^signupVerification$',views.signupVerification,name = 'signupVerification'),
   
 ]
