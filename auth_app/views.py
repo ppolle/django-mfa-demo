@@ -65,10 +65,11 @@ def profile(request):
 	View function to handle sending email links
 	'''
 	if request.user.email:
-		if request.user.profile.google_auth_enabled:
-			return redirect('gauth-validator')
-		else:
-			return redirect('gauth-generator')
+		return redirect('/settings/security')
+		# if request.user.profile.google_auth_enabled:
+		# 	return redirect('gauth-validator')
+		# else:
+		# 	return redirect('gauth-generator')
 		
 	else:
 		if request.method == 'POST':
