@@ -10,6 +10,6 @@ urlpatterns=[
     url('^activation_sent/$',views.activation_sent,name = 'activation_sent'),
     url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<email>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
         views.activate, name='activate'),
-    url('^gauth-validator/$',views.gauth_validator,name = 'gauth-validator'),
-    url('^gauth-generator/$',views.gauth_generator,name = 'gauth-generator'),
+
+    
 ]
