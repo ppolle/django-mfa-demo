@@ -65,7 +65,7 @@ def profile(request):
 	View function to handle sending email links
 	'''
 	if request.user.email:
-		return redirect('/settings/security')
+		return redirect('nexmo_auth:nexmoAuth')
 	
 		
 	else:
@@ -115,7 +115,7 @@ def activate(request, uidb64,email,token):
     except(TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
     if user is not None and account_activation_token.check_token(user, token):
-    	user.profile.email_confirmed = True
+    	Profile.objects.filter(user = request.user).update(email_confirmed = True)
     	User.objects.filter(id = user.id).update(email = email)
     	messages.success(request, f'Hey {user.username}! You have succesfully activated your email address!')
     	return redirect('profile')

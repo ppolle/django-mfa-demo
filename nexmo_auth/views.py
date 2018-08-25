@@ -3,6 +3,7 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.contrib import messages
+from auth_app.models import Profile
 
 
 from .forms import PhoneNumberForm,VerifyTokenForm
@@ -47,16 +48,16 @@ def verify(request):
 			response = client.check_verification(request.session['verification_id'], code=token)
 
 			if response['status'] == '0':
-				request.user.profile.phone_number = request.session['phone_number']
+				Profile.objects.filter(user_id = request.user.id).update(phone_number = request.session['phone_number'])
 				messages.success(request,'Succesfull verification')
-				return redirect('profile')
+				return render(request,'homepage.html')
 			else:
-				messages.error('Wrong token. Please try again')
+				messages.error(request,'Wrong token. Please try again')
 				return redirect(request.META.get('HTTP_REFERER'))
 
-	else:
-		messages.error('Wrong token. Please try again')
-		return redirect(request.META.get('HTTP_REFERER'))
+		else:
+			messages.error(request,'Wrong token. Please try again')
+			return redirect(request.META.get('HTTP_REFERER'))
 	else:
 		form = VerifyTokenForm()
 		return render(request,'nexmo/verifyToken.html',{'form':form})
@@ -72,6 +73,8 @@ def signinVerification(request):
 		request.session['verification_id'] = response['request_id']
 		request.session['phone_number'] = phone_number
 		return redirect('nexmo_auth:verify')
+	else:
+		return redirect('nexmo_auth:signupVerification')
 
 @login_required(login_url='/login/')
 def nexmoAuth(request):
