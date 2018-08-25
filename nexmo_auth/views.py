@@ -24,7 +24,7 @@ def signupVerification(request):
 			if response['status'] == '0':
 				request.session['verification_id'] = response['request_id']
 				request.session['phone_number'] = phone_number
-				return redirect('verify')
+				return redirect('nexmo_auth:verify')
 			else:
 				messages.error(request, 'That was a bad request. Please try using a correct phone number')
 				return redirect(request.META.get('HTTP_REFERER'))
@@ -55,6 +55,27 @@ def verify(request):
 	else:
 		form = VerifyTokenForm()
 		return render(request,'VerifyToken.html',{'form':form})
+
+@login_required(login_url='/login/')
+def signinVerification(request):
+	'''
+	This view function will manage signin with a nexmo 2fa
+	'''
+	phone_number = request.user.profile.phone_number
+	response = client.start_verification(number=phone_number, brand='Peter Polle')
+	if response['status'] == '0':
+		request.session['verification_id'] = response['request_id']
+		request.session['phone_number'] = phone_number
+		return redirect('nexmo_auth:verify')
+@login_required(login_url='/login/')
+def nexmoAuth(request):
+	'''
+	This view function will manage nexmo signin views
+	'''
+	if request.user.profile.phone_number:
+		return redirect('nexmo_auth:signinVerification')
+	else:
+		return redirect('nexmo_auth:signupVerification')
     		
 
 
