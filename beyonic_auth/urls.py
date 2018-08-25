@@ -21,5 +21,6 @@ urlpatterns = [
     url(r'',include('auth_app.urls')),
     url(r'',include('google_auth.urls')),
     url(r'^settings/', include('django_mfa.urls', namespace="mfa")),
-    
+    url(r'',include('nexmo_auth.urls')),
+
 ]

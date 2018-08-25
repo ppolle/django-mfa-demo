@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
-import dj_database_url 
+import dj_database_url
 from decouple import config
 from django.contrib.messages import constants as messages
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -32,7 +32,7 @@ EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', default=False, cast=bool) 
+DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = ['*']
 
@@ -49,9 +49,10 @@ INSTALLED_APPS = [
     'auth_app',
     'google_auth',
     'django_mfa',
+    'nexmo_auth',
     'bootstrap3',
     'qr_code',
-    
+
 ]
 
 MIDDLEWARE = [
@@ -147,3 +148,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+#Nexmo configurations
+
+NEXMO_KEY = config('NEXMO_KEY')
+NEXMO_SECRET = config('NEXMO_SECRET')
