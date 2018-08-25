@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from .models import Profile
 
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
@@ -120,4 +121,4 @@ def activate(request, uidb64,email,token):
     	messages.success(request, f'Hey {user.username}! You have succesfully activated your email address!')
     	return redirect('profile')
     else:
-        return HttpResponse('Activation link is invalid!')
+        return render(request,'email/invalid.html')
