@@ -55,8 +55,11 @@ def verify(request):
 				return redirect(request.META.get('HTTP_REFERER'))
 
 	else:
+		messages.error('Wrong token. Please try again')
+		return redirect(request.META.get('HTTP_REFERER'))
+	else:
 		form = VerifyTokenForm()
-		return render(request,'VerifyToken.html',{'form':form})
+		return render(request,'nexmo/verifyToken.html',{'form':form})
 
 @login_required(login_url='/login/')
 def signinVerification(request):
@@ -69,6 +72,7 @@ def signinVerification(request):
 		request.session['verification_id'] = response['request_id']
 		request.session['phone_number'] = phone_number
 		return redirect('nexmo_auth:verify')
+
 @login_required(login_url='/login/')
 def nexmoAuth(request):
 	'''
