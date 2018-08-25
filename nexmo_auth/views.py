@@ -28,7 +28,9 @@ def signupVerification(request):
 			else:
 				messages.error(request, 'That was a bad request. Please try using a correct phone number')
 				return redirect(request.META.get('HTTP_REFERER'))
-
+		else:
+			messages.error(request, 'Wrong phone number format')
+			return redirect(request.META.get('HTTP_REFERER'))
 	else:
 		form = PhoneNumberForm()
 		return render(request,'nexmo/verification.html',{'form':form})
