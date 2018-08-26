@@ -1,0 +1,29 @@
+{%extends 'partials/base.html'%}
+
+{% block content %}
+<h3 class="text-center"></h3>
+<div class="col-md-3"></div>
+<div class="col-md-6">
+	<div class="panel panel-default">
+			<div class="panel-heading">
+				 <h3>Beyonic MFA Selector</h3>
+			</div>
+			<div class="panel-body">
+				<form action="{% url 'auth' %}">
+				    {% csrf_token %}
+			    	<select class="form-control" name = "two_factor">
+			          	<option value="nexmo_auth">Use an SMS Service</option>
+			          	  
+						<option value="google_auth" selected>Use An App</option>
+							  
+							 
+					</select>
+					<br>
+				    <button type="submit" class="btn btn-success btn-block">2FA</button>
+				</form>
+			</div>
+		</div>
+  </div>
+  <div class="col-md-3"></div>
+{% endblock %}
+

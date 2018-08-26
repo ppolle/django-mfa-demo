@@ -1,12 +1,13 @@
 from django.contrib.auth import login as user_login, authenticate, logout as user_logout
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
-from .forms  import UserSignupForm,UserAuthForm,EmailConfirmationForm
+from .forms  import UserSignupForm,UserAuthForm,EmailConfirmationForm,TwoFactorChoicesForm
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Profile
+from django_mfa.models import *
 
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
@@ -20,7 +21,10 @@ def welcome(request):
 	'''
 	View function to render the landing page
 	'''
-	return render(request,'index.html')
+	if request.user.is_authenticated:
+		return redirect('profile')
+	else:
+		return render(request,'index.html')
 
 def signup(request):
 	'''
@@ -66,8 +70,12 @@ def profile(request):
 	View function to handle sending email links
 	'''
 	if request.user.email:
-		return redirect('nexmo_auth:nexmoAuth')
-	
+		if is_mfa_enabled(request.user):
+			return redirect('mfa:verify_otp')
+		elif request.user.profile.phone_number:
+			return redirect('nexmo_auth:signinVerification')
+		else:
+			return redirect('authChoice')
 		
 	else:
 		if request.method == 'POST':
@@ -122,3 +130,23 @@ def activate(request, uidb64,email,token):
     	return redirect('profile')
     else:
         return render(request,'email/invalid.html')
+
+def auth(request):
+	'''
+	This view function will render a page that shows a 2fa form selection
+	'''
+
+	two_factor = request.GET.get('two_factor')
+	if two_factor == "google_auth":
+		return redirect('mfa:configure_mfa')
+	if two_factor == "nexmo_auth":
+		return redirect('nexmo_auth:signupVerification')
+	
+		
+		
+		
+def authChoice(request):
+	'''
+	This view function will render the auth choice form
+	'''
+	return render(request,'authentication/auth.html')
