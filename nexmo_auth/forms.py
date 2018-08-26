@@ -13,6 +13,7 @@ class PhoneNumberForm(forms.ModelForm):
 	def __init__(self,*args, **kwargs):
 		super(PhoneNumberForm, self).__init__(*args, **kwargs)
 		self.fields['phone_number'].widget.attrs['class'] ='form-control'
+		self.fields['phone_number'].help_text = 'Please make sure your number is in the format: +254 700 000 000'
 		
 	#phone_number = forms.IntegerField(label = 'Phone Number',required = True,widget=forms.TextInput(attrs={'class':'form-control'}))
 	
