@@ -36,6 +36,9 @@ def signup(request):
 			form.save()
 			
 			return redirect('login')
+		else:
+			messages.error(request, 'Sorry! That was an error on our part. Please startt the signup process again.')
+			return redirect(request.META.get('HTTP_REFERER'))
 
 	else:
 		form = UserSignupForm()
