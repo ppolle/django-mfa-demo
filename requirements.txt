@@ -3,7 +3,7 @@ Babel==2.6.0
 certifi==2018.8.24
 cffi==1.11.5
 chardet==3.0.4
-cryptography==2.3.1
+cryptography==3.2
 dj-database-url==0.5.0
 Django==1.11
 django-bootstrap3==10.0.1
