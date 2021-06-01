@@ -22,5 +22,5 @@ pytz==2018.5
 qrcode==6.0
 requests==2.19.1
 six==1.11.0
-urllib3==1.23
+urllib3==1.26.5
 whitenoise==4.0
